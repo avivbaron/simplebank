@@ -46,11 +46,19 @@ jobs:
     - name: Check out code into Go module directory
       uses: actions/checkout@v3
 
-    - name: Install golang-migrate
-      run: 
-        curl -L https://github.com/golang-migrate/migrate/releases/download/v4.18.3/migrate.linux-amd64.tar.gz | tar xvz
-        sudo mv migrate.linux-amd64 /use/bin/migrate
-        which migrate
+
+      # Migrations set up 
+    - name: Download migrate binary
+      run: curl -L https://github.com/golang-migrate/migrate/releases/download/v4.18.3/migrate.linux-amd64.tar.gz -o migrate.tar.gz
+
+    - name: Extract migrate binary
+      run: tar -xvzf migrate.tar.gz
+
+    - name: Move binary to /usr/bin
+      run: sudo mv migrate.linux-amd64 /usr/bin/migrate && chmod +x /usr/bin/migrate
+
+    - name: Verify migrate is installed
+      run: migrate -version
 
     - name: Run migrations
       run: make migrateup
