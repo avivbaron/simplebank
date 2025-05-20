@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/avivbaron/simplebank/util"
+	"github.com/jackc/pgx/v5"
 	"github.com/stretchr/testify/require"
 )
 
@@ -75,7 +76,7 @@ func TestDeleteAccount(t *testing.T) {
 
 	account2, err := testQueries.GetAccount(context.Background(), account1.ID)
 	require.Error(t, err)
-	require.EqualError(t, err, ErrRecordNotFound.Error())
+	require.EqualError(t, err, pgx.ErrNoRows.Error())
 	require.Empty(t, account2)
 }
 
