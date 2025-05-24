@@ -25,7 +25,7 @@ func TestListAccounts(t *testing.T) {
 	var accountList []db.Account
 
 	for range pageSizeRand {
-		accountList = append(accountList, randomAccount())
+		accountList = append(accountList, randomAccount(util.RandomOwner()))
 	}
 
 	testCases := []struct {
@@ -100,7 +100,7 @@ func TestListAccounts(t *testing.T) {
 			tc.buildStubs(store)
 
 			// start test server and send request
-			server := NewServer(store)
+			server := newTestServer(t, store)
 			recorder := httptest.NewRecorder()
 
 			url := fmt.Sprintf("/accounts?page_id=%d&page_size=%d", tc.pageID, tc.pageSize)
@@ -114,7 +114,8 @@ func TestListAccounts(t *testing.T) {
 }
 
 func TestCreateAccount(t *testing.T) {
-	newAccount := randomAccount()
+	user, _ := randomUser(t)
+	newAccount := randomAccount(user.Username)
 
 	testCases := []struct {
 		name          string
@@ -188,7 +189,7 @@ func TestCreateAccount(t *testing.T) {
 			tc.buildStubs(store)
 
 			// start test server and send request
-			server := NewServer(store)
+			server := newTestServer(t, store)
 			recorder := httptest.NewRecorder()
 			body, err := json.Marshal(tc.body)
 			require.NoError(t, err)
@@ -203,7 +204,8 @@ func TestCreateAccount(t *testing.T) {
 }
 
 func TestGetAccountAPI(t *testing.T) {
-	account := randomAccount()
+	user, _ := randomUser(t)
+	account := randomAccount(user.Username)
 
 	testCases := []struct {
 		name          string
@@ -274,7 +276,7 @@ func TestGetAccountAPI(t *testing.T) {
 			tc.buildStubs(store)
 
 			// start test server and send request
-			server := NewServer(store)
+			server := newTestServer(t, store)
 			recorder := httptest.NewRecorder()
 
 			url := fmt.Sprintf("/accounts/%d", tc.accountID)
@@ -287,10 +289,10 @@ func TestGetAccountAPI(t *testing.T) {
 	}
 }
 
-func randomAccount() db.Account {
+func randomAccount(owner string) db.Account {
 	return db.Account{
 		ID:       util.RandomInt(1, 1000),
-		Owner:    util.RandomOwner(),
+		Owner:    owner,
 		Balance:  util.RandomMoney(),
 		Currency: util.RandomCurrency(),
 	}
