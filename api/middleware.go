@@ -42,7 +42,7 @@ func authMiddleware(tokenMaker token.Maker) gin.HandlerFunc {
 		}
 
 		accessToken := fields[1]
-		payload, err := tokenMaker.VerifyToken(accessToken, token.TokenTypeAccessToken)
+		payload, err := tokenMaker.VerifyToken(accessToken)
 		if err != nil {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, errorResponse(err))
 			return
