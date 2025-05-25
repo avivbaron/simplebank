@@ -11,6 +11,7 @@ import (
 )
 
 var testQueries *Queries
+var testDB *sql.DB
 var testStore Store
 
 func TestMain(m *testing.M) {
@@ -18,11 +19,12 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		log.Fatal("cannot laod config:", err)
 	}
-	conn, err := sql.Open(config.DBDriver, config.DBSource)
+	testDB, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
 		log.Fatal("cannot connect to db:", err)
 	}
 
-	testQueries = New(conn)
+	testQueries = New(testDB)
+	testStore = NewStore(testDB)
 	os.Exit(m.Run())
 }
