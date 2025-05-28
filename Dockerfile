@@ -9,7 +9,7 @@ RUN apk add --no-cache curl
 COPY . .
 
 # Build Go binary
-RUN go build -o sb main.go
+RUN go build -o main main.go
 
 # Download and extract golang-migrate
 RUN curl -L https://github.com/golang-migrate/migrate/releases/download/v4.18.3/migrate.linux-amd64.tar.gz \
@@ -20,7 +20,7 @@ FROM alpine:3.21
 WORKDIR /app
 
 # Copy built binary and migrate CLI
-COPY --from=builder /app/sb .
+COPY --from=builder /app/main .
 COPY --from=builder /app/migrate ./migrate
 
 # Copy environment and migrations
@@ -38,27 +38,4 @@ RUN chmod +x ./start.sh ./wait-for.sh
 EXPOSE 8080
 
 ENTRYPOINT ["/app/start.sh"]
-
-
-
-# # Build Stage
-# FROM golang:1.24-alpine3.21 AS builder
-# WORKDIR /app
-# COPY . .
-# RUN go build -o sb main.go
-# RUN apk add curl
-# RUN curl -L https://github.com/golang-migrate/migrate/releases/download/v4.18.3/migrate.linux-amd64.tar.gz -o migrate.tar.gz
-# RUN tar -xvzf migrate.tar.gz
-# RUN chmod +x /usr/bin/migrate
-
-# # Run Stage
-# FROM alpine:3.21
-# WORKDIR /app
-# COPY --from=builder /app/sb .
-# COPY --from=builder /app/migrate ./migrate
-# COPY app.env .
-# COPY db/migration ./migration
-
-# EXPOSE 8080
-# CMD ["/app/sb"]
-# ENTRYPOINT [ "/app/start.sh" ]
+CMD ["/app/main"]
