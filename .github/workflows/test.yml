@@ -47,22 +47,22 @@ jobs:
       uses: actions/checkout@v3
 
 
-    #   # Migrations set up 
-    # - name: Download Golang Migrate binary
-    #   run: curl -L https://github.com/golang-migrate/migrate/releases/download/v4.18.3/migrate.linux-amd64.tar.gz -o migrate.tar.gz
+      # Migrations set up 
+    - name: Download Golang Migrate binary
+      run: curl -L https://github.com/golang-migrate/migrate/releases/download/v4.18.3/migrate.linux-amd64.tar.gz -o migrate.tar.gz
           
-    # - name: Extract migrate binary
-    #   run: tar -xvzf migrate.tar.gz
+    - name: Extract migrate binary
+      run: tar -xvzf migrate.tar.gz
           
-    # - name: Move binary to /usr/bin
-    #   run: sudo mv migrate /usr/bin/migrate && chmod +x /usr/bin/migrate
+    - name: Move binary to /usr/bin
+      run: sudo mv migrate /usr/bin/migrate && chmod +x /usr/bin/migrate
           
-    # - name: Check migrate version
-    #   run: migrate -version
+    - name: Check migrate version
+      run: migrate -version
 
 
-    # - name: Run migrations
-    #   run: make migrateup
+    - name: Run migrations
+      run: make migrateup
 
     - name: Test
       run: make test
