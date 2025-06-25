@@ -62,8 +62,8 @@ func (server *Server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (
 		SessionId:             session.ID.String(),
 		AccessToken:           accessToken,
 		RefreshToken:          refreshToken,
-		AccessTokenExpiredAt:  timestamppb.New(accessPayload.ExpiredAt),
-		RefreshTokenExpiredAt: timestamppb.New(refreshPayload.ExpiredAt),
+		AccessTokenExpiresAt:  timestamppb.New(accessPayload.ExpiredAt),
+		RefreshTokenExpiresAt: timestamppb.New(refreshPayload.ExpiredAt),
 	}
 
 	return res, nil
