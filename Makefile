@@ -40,4 +40,7 @@ proto:
     --go-grpc_out=pb --go-grpc_opt=paths=source_relative \
     proto/*.proto
 
+evans:
+	evans_windows_amd64\evans.exe --host localhost --port 9090 -r repl
+
 .PHONY: postgres createdb dropdb migrateup migratedown test sqlc server mock migratedown1 migrateup1 proto
